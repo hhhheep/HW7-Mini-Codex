@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Search Visual Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Binary Search Visual Demo</h1>
+    <div id="controls">
+      <label for="arrayInput">Sorted Array (comma separated):</label>
+      <input type="text" id="arrayInput" value="2,5,8,12,16,23,38,45,56,72,91" />
+      <label for="targetInput">Target Value:</label>
+      <input type="number" id="targetInput" value="23" />
+      <button id="resetBtn">Reset</button>
+      <button id="stepBtn">Step Forward</button>
+      <button id="autoBtn">Auto Run</button>
+    </div>
+    <div id="arrayContainer">
+      <div id="arrayDisplay"></div>
+    </div>
+    <div id="infoPanel">
+      <p><strong>Low:</strong> <span id="lowDisplay">-</span></p>
+      <p><strong>Mid:</strong> <span id="midDisplay">-</span></p>
+      <p><strong>High:</strong> <span id="highDisplay">-</span></p>
+      <p><strong>Status:</strong> <span id="statusDisplay">Ready</span></p>
+      <p><strong>Explanation:</strong></p>
+      <div id="explanationBox">Press "Step Forward" to begin.</div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

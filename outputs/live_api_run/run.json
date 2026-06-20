@@ -1,0 +1,281 @@
+{
+  "agent_outputs": [
+    {
+      "artifacts_to_create": [
+        "TaskSpec JSON"
+      ],
+      "decisions": [
+        "Streamlit app runs locally with `streamlit run app.py`.",
+        "User can input a task and two prompt variants.",
+        "When API key is set, app calls OpenAI-compatible API and displays responses.",
+        "When no API key is set, app uses deterministic mock output.",
+        "App records and displays comparison report (prompts, model, settings, responses).",
+        "All tests pass without network access or API keys.",
+        "Project includes app.py, requirements.txt, README.md, and test files."
+      ],
+      "next_steps": [
+        "Architect Agent consumes TaskSpec."
+      ],
+      "prompt": "Return JSON matching this schema:\n{\"title\": str, \"objective\": str, \"constraints\": [str], \"target_stack\": [str], \"success_criteria\": [str]}\n\nTask: convert the user request into a bounded generative-AI experiment TaskSpec.\nDo not include credentials, private paths, SSH, or remote GPU requirements.",
+      "raw_response": "{\n  \"title\": \"LLM Prompt Comparison App\",\n  \"objective\": \"Build a Streamlit app that allows users to enter a task, compare two prompt variants, optionally call an OpenAI-compatible LLM API when an API key is available, and fall back to deterministic mock output when no key is available. The app should record prompt, model name, settings, generated responses, and produce a simple comparison report. The generated project must include app.py, requirements.txt, README.md, and unittest tests that do not require network access or API keys.\",\n  \"constraints\": [\n    \"No credentials, private paths, SSH, or remote GPU requirements.\",\n    \"Must include app.py, requirements.txt, README.md, and unittest tests.\",\n    \"Tests must not require network access or API keys.\",\n    \"Must fall back to deterministic mock output when no API key is available.\",\n    \"Must record prompt, model name, settings, and generated responses.\",\n    \"Must produce a simple comparison report.\"\n  ],\n  \"target_stack\": [\n    \"Python 3.9+\",\n    \"Streamlit\",\n    \"OpenAI Python client (optional, for API calls)\",\n    \"unittest (for testing)\"\n  ],\n  \"success_criteria\": [\n    \"Streamlit app runs locally with `streamlit run app.py`.\",\n    \"User can input a task and two prompt variants.\",\n    \"When API key is set, app calls OpenAI-compatible API and displays responses.\",\n    \"When no API key is set, app uses deterministic mock output.\",\n    \"App records and displays comparison report (prompts, model, settings, responses).\",\n    \"All tests pass without network access or API keys.\",\n    \"Project includes app.py, requirements.txt, README.md, and test files.\"\n  ]\n}",
+      "role": "Planner Agent",
+      "summary": "Created TaskSpec from user request using live model output."
+    },
+    {
+      "artifacts_to_create": [
+        "app.py - Main Streamlit application with UI and logic",
+        "test_app.py - Unit tests for core functionality without network access",
+        "requirements.txt - Python dependencies",
+        "README.md - Setup and usage instructions"
+      ],
+      "decisions": [
+        "app.py",
+        "test_app.py",
+        "requirements.txt",
+        "README.md"
+      ],
+      "next_steps": [
+        "Coder Agent creates the listed files."
+      ],
+      "prompt": "Return JSON matching this schema:\n{\n \"summary\": str,\n \"modules\": [str],\n \"data_flow\": [str],\n \"file_structure\": [str],\n \"plan\": [{\"id\": str, \"goal\": str, \"inputs\": [str], \"outputs\": [str], \"risk\": str}]\n}\n\nDesign a single-machine generated project and validation flow for the TaskSpec.",
+      "raw_response": "```json\n{\n  \"summary\": \"Build a Streamlit app for comparing two LLM prompt variants with optional API integration and deterministic fallback, including a comparison report and unit tests.\",\n  \"modules\": [\n    \"app.py\",\n    \"test_app.py\",\n    \"requirements.txt\",\n    \"README.md\"\n  ],\n  \"data_flow\": [\n    \"User inputs task description and two prompt variants via Streamlit UI\",\n    \"App checks for OPENAI_API_KEY environment variable\",\n    \"If key exists: call OpenAI-compatible API with each prompt variant\",\n    \"If no key: use deterministic mock output generator\",\n    \"Record prompt, model name, settings, and generated responses\",\n    \"Display comparison report showing both responses side by side\"\n  ],\n  \"file_structure\": [\n    \"app.py - Main Streamlit application with UI and logic\",\n    \"test_app.py - Unit tests for core functionality without network access\",\n    \"requirements.txt - Python dependencies\",\n    \"README.md - Setup and usage instructions\"\n  ],\n  \"plan\": [\n    {\n      \"id\": \"1\",\n      \"goal\": \"Create app.py with Streamlit UI for task input and prompt variants\",\n      \"inputs\": [\"Task description\", \"Prompt variant A\", \"Prompt variant B\"],\n      \"outputs\": [\"Streamlit form with input fields\", \"Submit button\"],\n      \"risk\": \"Low - standard Streamlit form creation\"\n    },\n    {\n      \"id\": \"2\",\n      \"goal\": \"Implement API call logic with fallback to deterministic mock\",\n      \"inputs\": [\"Prompt text\", \"API key (optional)\"],\n      \"outputs\": [\"Generated response text\"],\n      \"risk\": \"Medium - need to handle API errors gracefully and ensure mock is deterministic\"\n    },\n    {\n      \"id\": \"3\",\n      \"goal\": \"Build comparison report display\",\n      \"inputs\": [\"Prompt A response\", \"Prompt B response\", \"Metadata (model, settings)\"],\n      \"outputs\": [\"Side-by-side comparison view\", \"Downloadable report\"],\n      \"risk\": \"Low - standard Streamlit display components\"\n    },\n    {\n      \"id\": \"4\",\n      \"goal\": \"Create test_app.py with unit tests\",\n      \"inputs\": [\"Mock functions\", \"Test cases\"],\n      \"outputs\": [\"Passing test suite\"],\n      \"risk\": \"Medium - must ensure tests don't require network or API keys\"\n    },\n    {\n      \"id\": \"5\",\n      \"goal\": \"Write requirements.txt and README.md\",\n      \"inputs\": [\"Project dependencies\", \"Setup instructions\"],\n      \"outputs\": [\"requirements.txt file\", \"README.md documentation\"],\n      \"risk\": \"Low - standard documentation\"\n    }\n  ]\n}\n```",
+      "role": "Architect Agent",
+      "summary": "Build a Streamlit app for comparing two LLM prompt variants with optional API integration and deterministic fallback, including a comparison report and unit tests."
+    },
+    {
+      "artifacts_to_create": [
+        "app.py",
+        "requirements.txt",
+        "README.md",
+        "tests/test_basic.py"
+      ],
+      "decisions": [
+        "Write generated_project files",
+        "Keep validation local and allowlisted"
+      ],
+      "next_steps": [
+        "Runner writes and validates generated files."
+      ],
+      "prompt": "Return JSON as a list of files:\n[{\"path\": str, \"content\": str, \"purpose\": str}]\n\nGenerate actual project files under generated_project. Required relative paths:\napp.py, requirements.txt, README.md, tests/test_basic.py.\nThe generated project must be self-contained in exactly those files.\nDo not import helper modules such as api_client.py, mock_responses.py, prompt_comparator.py,\nor any file that is not included in the JSON list.\nAll app logic, deterministic fallback logic, and optional API-call stubs must live in app.py.\nThe generated tests must use unittest, must not require network access or API keys,\nand must pass with: python -m unittest discover -s generated_project/tests.\nTests may check file existence, source text, and pure helper functions, but must not\nclick Streamlit controls or expect a real Streamlit runtime.",
+      "raw_response": "[\n  {\n    \"path\": \"app.py\",\n    \"content\": \"import streamlit as st\\nimport os\\nimport json\\nfrom datetime import datetime\\n\\n# Try to import OpenAI, but don't fail if not installed\\ntry:\\n    from openai import OpenAI\\n    OPENAI_AVAILABLE = True\\nexcept ImportError:\\n    OPENAI_AVAILABLE = False\\n\\n# Default model configuration\\nDEFAULT_MODEL = \\\"gpt-3.5-turbo\\\"\\nDEFAULT_TEMPERATURE = 0.7\\nDEFAULT_MAX_TOKENS = 150\\n\\n# Deterministic mock responses for when no API key is available\\nMOCK_RESPONSES = {\\n    \\\"default\\\": {\\n        \\\"response_a\\\": \\\"This is a deterministic mock response for Prompt A. The task would be addressed by focusing on key requirements and delivering a structured solution.\\\",\\n        \\\"response_b\\\": \\\"This is a deterministic mock response for Prompt B. The approach would involve analyzing the problem from multiple angles and providing a comprehensive answer.\\\"\\n    }\\n}\\n\\ndef get_mock_response(prompt_variant: str) -> str:\\n    \\\"\\\"\\\"Generate a deterministic mock response based on the prompt variant.\\\"\\\"\\\"\\n    if \\\"prompt a\\\" in prompt_variant.lower() or prompt_variant == \\\"A\\\":\\n        return MOCK_RESPONSES[\\\"default\\\"][\\\"response_a\\\"]\\n    elif \\\"prompt b\\\" in prompt_variant.lower() or prompt_variant == \\\"B\\\":\\n        return MOCK_RESPONSES[\\\"default\\\"][\\\"response_b\\\"]\\n    else:\\n        # Generate a deterministic response based on the prompt content\\n        import hashlib\\n        hash_obj = hashlib.md5(prompt_variant.encode())\\n        hash_hex = hash_obj.hexdigest()\\n        return f\\\"Deterministic mock response for prompt with hash {hash_hex[:8]}. This is a fallback response generated without API access.\\\"\\n\\ndef call_openai_api(prompt: str, api_key: str, model: str = DEFAULT_MODEL, \\n                    temperature: float = DEFAULT_TEMPERATURE, \\n                    max_tokens: int = DEFAULT_MAX_TOKENS) -> str:\\n    \\\"\\\"\\\"Call OpenAI-compatible API with the given prompt.\\\"\\\"\\\"\\n    if not OPENAI_AVAILABLE:\\n        return \\\"Error: OpenAI library not installed. Please install with: pip install openai\\\"\\n    \\n    try:\\n        client = OpenAI(api_key=api_key)\\n        response = client.chat.completions.create(\\n            model=model,\\n            messages=[\\n                {\\\"role\\\": \\\"system\\\", \\\"content\\\": \\\"You are a helpful assistant.\\\"},\\n                {\\\"role\\\": \\\"user\\\", \\\"content\\\": prompt}\\n            ],\\n            temperature=temperature,\\n            max_tokens=max_tokens\\n        )\\n        return response.choices[0].message.content\\n    except Exception as e:\\n        return f\\\"Error calling API: {str(e)}\\\"\\n\\ndef generate_response(prompt: str, prompt_variant_label: str, api_key: str = None) -> dict:\\n    \\\"\\\"\\\"Generate a response using API if key available, otherwise use mock.\\\"\\\"\\\"\\n    if api_key and api_key.strip():\\n        response_text = call_openai_api(prompt, api_key)\\n        source = \\\"api\\\"\\n    else:\\n        response_text = get_mock_response(prompt_variant_label)\\n        source = \\\"mock\\\"\\n    \\n    return {\\n        \\\"prompt\\\": prompt,\\n        \\\"response\\\": response_text,\\n        \\\"source\\\": source,\\n        \\\"model\\\": DEFAULT_MODEL if source == \\\"api\\\" else \\\"mock\\\",\\n        \\\"temperature\\\": DEFAULT_TEMPERATURE,\\n        \\\"max_tokens\\\": DEFAULT_MAX_TOKENS,\\n        \\\"timestamp\\\": datetime.now().isoformat()\\n    }\\n\\ndef create_comparison_report(task: str, prompt_a: str, prompt_b: str, \\n                              result_a: dict, result_b: dict) -> dict:\\n    \\\"\\\"\\\"Create a structured comparison report.\\\"\\\"\\\"\\n    return {\\n        \\\"task\\\": task,\\n        \\\"prompt_a\\\": prompt_a,\\n        \\\"prompt_b\\\": prompt_b,\\n        \\\"response_a\\\": result_a[\\\"response\\\"],\\n        \\\"response_b\\\": result_b[\\\"response\\\"],\\n        \\\"model_a\\\": result_a[\\\"model\\\"],\\n        \\\"model_b\\\": result_b[\\\"model\\\"],\\n        \\\"source_a\\\": result_a[\\\"source\\\"],\\n        \\\"source_b\\\": result_b[\\\"source\\\"],\\n        \\\"temperature\\\": result_a[\\\"temperature\\\"],\\n        \\\"max_tokens\\\": result_a[\\\"max_tokens\\\"],\\n        \\\"timestamp\\\": datetime.now().isoformat()\\n    }\\n\\ndef main():\\n    st.set_page_config(page_title=\\\"LLM Prompt Comparison App\\\", layout=\\\"wide\\\")\\n    \\n    st.title(\\\"🤖 LLM Prompt Comparison App\\\")\\n    st.markdown(\\\"Compare two prompt variants for the same task.\\\")\\n    \\n    # Sidebar for configuration\\n    with st.sidebar:\\n        st.header(\\\"Configuration\\\")\\n        api_key = st.text_input(\\\"OpenAI API Key (optional)\\\", type=\\\"password\\\", \\n                                help=\\\"Leave empty to use deterministic mock responses\\\")\\n        \\n        if api_key:\\n            st.success(\\\"API key provided - will use OpenAI API\\\")\\n        else:\\n            st.info(\\\"No API key - using deterministic mock responses\\\")\\n        \\n        st.divider()\\n        st.markdown(\\\"### Settings\\\")\\n        model = st.text_input(\\\"Model\\\", value=DEFAULT_MODEL, disabled=not bool(api_key))\\n        temperature = st.slider(\\\"Temperature\\\", 0.0, 2.0, DEFAULT_TEMPERATURE, 0.1, disabled=not bool(api_key))\\n        max_tokens = st.number_input(\\\"Max Tokens\\\", 50, 500, DEFAULT_MAX_TOKENS, disabled=not bool(api_key))\\n    \\n    # Main content area\\n    col1, col2 = st.columns(2)\\n    \\n    with col1:\\n        st.subheader(\\\"Task Description\\\")\\n        task = st.text_area(\\\"Enter the task for the LLM:\\\", height=100, \\n                           placeholder=\\\"e.g., Write a short poem about AI\\\")\\n    \\n    with col2:\\n        st.subheader(\\\"Comparison Settings\\\")\\n        st.markdown(\\\"Enter two different prompt variants for the same task.\\\")\\n    \\n    st.divider()\\n    \\n    col_a, col_b = st.columns(2)\\n    \\n    with col_a:\\n        st.subheader(\\\"Prompt Variant A\\\")\\n        prompt_a = st.text_area(\\\"Enter Prompt A:\\\", height=150, key=\\\"prompt_a\\\",\\n                               placeholder=\\\"e.g., Write a creative poem about artificial intelligence\\\")\\n    \\n    with col_b:\\n        st.subheader(\\\"Prompt Variant B\\\")\\n        prompt_b = st.text_area(\\\"Enter Prompt B:\\\", height=150, key=\\\"prompt_b\\\",\\n                               placeholder=\\\"e.g., Compose a haiku about machine learning\\\")\\n    \\n    # Compare button\\n    if st.button(\\\"Compare Prompts\\\", type=\\\"primary\\\", use_container_width=True):\\n        if not task.strip():\\n            st.error(\\\"Please enter a task description.\\\")\\n        elif not prompt_a.strip() or not prompt_b.strip():\\n            st.error(\\\"Please enter both prompt variants.\\\")\\n        else:\\n            with st.spinner(\\\"Generating responses...\\\"):\\n                # Generate responses\\n                result_a = generate_response(prompt_a, \\\"A\\\", api_key)\\n                result_b = generate_response(prompt_b, \\\"B\\\", api_key)\\n                \\n                # Create comparison report\\n                report = create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\\n                \\n                # Store in session state for persistence\\n                st.session_state[\\\"last_report\\\"] = report\\n                st.session_state[\\\"result_a\\\"] = result_a\\n                st.session_state[\\\"result_b\\\"] = result_b\\n    \\n    # Display results if available\\n    if \\\"last_report\\\" in st.session_state:\\n        report = st.session_state[\\\"last_report\\\"]\\n        result_a = st.session_state[\\\"result_a\\\"]\\n        result_b = st.session_state[\\\"result_b\\\"]\\n        \\n        st.divider()\\n        st.header(\\\"📊 Comparison Report\\\")\\n        \\n        # Metadata section\\n        with st.expander(\\\"Report Metadata\\\", expanded=False):\\n            col_m1, col_m2, col_m3 = st.columns(3)\\n            with col_m1:\\n                st.metric(\\\"Task\\\", report[\\\"task\\\"][:50] + \\\"...\\\" if len(report[\\\"task\\\"]) > 50 else report[\\\"task\\\"])\\n            with col_m2:\\n                st.metric(\\\"Temperature\\\", report[\\\"temperature\\\"])\\n            with col_m3:\\n                st.metric(\\\"Max Tokens\\\", report[\\\"max_tokens\\\"])\\n            \\n            st.markdown(f\\\"**Timestamp:** {report['timestamp']}\\\")\\n        \\n        # Response comparison\\n        col_r1, col_r2 = st.columns(2)\\n        \\n        with col_r1:\\n            st.subheader(\\\"Prompt A Response\\\")\\n            st.markdown(f\\\"**Source:** {'API' if result_a['source'] == 'api' else 'Mock'}\\\")\\n            st.markdown(f\\\"**Model:** {result_a['model']}\\\")\\n            st.info(result_a[\\\"response\\\"])\\n        \\n        with col_r2:\\n            st.subheader(\\\"Prompt B Response\\\")\\n            st.markdown(f\\\"**Source:** {'API' if result_b['source'] == 'api' else 'Mock'}\\\")\\n            st.markdown(f\\\"**Model:** {result_b['model']}\\\")\\n            st.info(result_b[\\\"response\\\"])\\n        \\n        # Full prompt display\\n        with st.expander(\\\"View Full Prompts\\\"):\\n            st.markdown(\\\"### Prompt A\\\")\\n            st.code(report[\\\"prompt_a\\\"], language=\\\"text\\\")\\n            st.markdown(\\\"### Prompt B\\\")\\n            st.code(report[\\\"prompt_b\\\"], language=\\\"text\\\")\\n        \\n        # Download report\\n        report_json = json.dumps(report, indent=2)\\n        st.download_button(\\n            label=\\\"Download Report (JSON)\\\",\\n            data=report_json,\\n            file_name=f\\\"prompt_comparison_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json\\\",\\n            mime=\\\"application/json\\\"\\n        )\\n\\nif __name__ == \\\"__main__\\\":\\n    main()\\n\",\n    \"purpose\": \"Main Streamlit application with UI, API call logic, deterministic mock fallback, and comparison report generation.\"\n  },\n  {\n    \"path\": \"requirements.txt\",\n    \"content\": \"streamlit>=1.28.0\\nopenai>=1.0.0\\n\",\n    \"purpose\": \"Python dependencies for the project.\"\n  },\n  {\n    \"path\": \"README.md\",\n    \"content\": \"# LLM Prompt Comparison App\\n\\nA Streamlit application for comparing two LLM prompt variants side by side.\\n\\n## Features\\n\\n- Input a task and two prompt variants\\n- Optional OpenAI API integration (when API key is provided)\\n- Deterministic mock responses when no API key is available\\n- Side-by-side comparison report\\n- Downloadable JSON report\\n\\n## Setup\\n\\n1. Clone the repository:\\n   ```bash\\n   git clone <repository-url>\\n   cd llm-prompt-comparison\\n   ```\\n\\n2. Install dependencies:\\n   ```bash\\n   pip install -r requirements.txt\\n   ```\\n\\n3. Run the application:\\n   ```bash\\n   streamlit run app.py\\n   ```\\n\\n## Usage\\n\\n1. Open the app in your browser (default: http://localhost:8501)\\n2. (Optional) Enter your OpenAI API key in the sidebar for real API responses\\n3. Enter a task description\\n4. Enter two prompt variants (Prompt A and Prompt B)\\n5. Click \\\"Compare Prompts\\\"\\n6. View the comparison report with responses side by side\\n7. Download the report as JSON if needed\\n\\n## Testing\\n\\nRun tests with:\\n```bash\\npython -m unittest discover -s tests\\n```\\n\\nTests do not require network access or API keys.\\n\\n## Project Structure\\n\\n```\\n.\\n├── app.py              # Main Streamlit application\\n├── requirements.txt    # Python dependencies\\n├── README.md          # This file\\n└── tests/\\n    └── test_basic.py  # Unit tests\\n```\\n\\n## How It Works\\n\\n- When an API key is provided, the app calls the OpenAI-compatible API\\n- When no API key is available, the app uses deterministic mock responses\\n- The comparison report includes prompts, model names, settings, and generated responses\\n- All responses are recorded with timestamps for reproducibility\\n\",\n    \"purpose\": \"Project documentation with setup and usage instructions.\"\n  },\n  {\n    \"path\": \"tests/test_basic.py\",\n    \"content\": \"import unittest\\nimport sys\\nimport os\\nimport json\\nfrom unittest.mock import patch, MagicMock\\n\\n# Add parent directory to path to import app\\nsys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))\\n\\n# Import the app module\\nimport app\\n\\nclass TestAppCoreFunctions(unittest.TestCase):\\n    \\\"\\\"\\\"Test core functions of the app without Streamlit runtime.\\\"\\\"\\\"\\n\\n    def test_get_mock_response_prompt_a(self):\\n        \\\"\\\"\\\"Test deterministic mock response for Prompt A.\\\"\\\"\\\"\\n        response = app.get_mock_response(\\\"A\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_a\\\"])\\n        \\n        response = app.get_mock_response(\\\"prompt a\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_a\\\"])\\n        \\n        response = app.get_mock_response(\\\"Prompt A\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_a\\\"])\\n\\n    def test_get_mock_response_prompt_b(self):\\n        \\\"\\\"\\\"Test deterministic mock response for Prompt B.\\\"\\\"\\\"\\n        response = app.get_mock_response(\\\"B\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_b\\\"])\\n        \\n        response = app.get_mock_response(\\\"prompt b\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_b\\\"])\\n        \\n        response = app.get_mock_response(\\\"Prompt B\\\")\\n        self.assertEqual(response, app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_b\\\"])\\n\\n    def test_get_mock_response_other(self):\\n        \\\"\\\"\\\"Test deterministic mock response for other prompts.\\\"\\\"\\\"\\n        response = app.get_mock_response(\\\"Some custom prompt\\\")\\n        self.assertIn(\\\"Deterministic mock response\\\", response)\\n        self.assertIn(\\\"hash\\\", response.lower())\\n        \\n        # Test determinism: same input should give same output\\n        response2 = app.get_mock_response(\\\"Some custom prompt\\\")\\n        self.assertEqual(response, response2)\\n\\n    def test_generate_response_no_api_key(self):\\n        \\\"\\\"\\\"Test generate_response without API key uses mock.\\\"\\\"\\\"\\n        result = app.generate_response(\\\"Test prompt\\\", \\\"A\\\", api_key=None)\\n        self.assertEqual(result[\\\"source\\\"], \\\"mock\\\")\\n        self.assertEqual(result[\\\"model\\\"], \\\"mock\\\")\\n        self.assertEqual(result[\\\"response\\\"], app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_a\\\"])\\n        \\n        result = app.generate_response(\\\"Test prompt\\\", \\\"B\\\", api_key=\\\"\\\")\\n        self.assertEqual(result[\\\"source\\\"], \\\"mock\\\")\\n        self.assertEqual(result[\\\"response\\\"], app.MOCK_RESPONSES[\\\"default\\\"][\\\"response_b\\\"])\\n\\n    def test_generate_response_with_api_key(self):\\n        \\\"\\\"\\\"Test generate_response with API key attempts API call.\\\"\\\"\\\"\\n        # Mock the OpenAI call to avoid network access\\n        with patch('app.call_openai_api') as mock_call:\\n            mock_call.return_value = \\\"Mocked API response\\\"\\n            result = app.generate_response(\\\"Test prompt\\\", \\\"A\\\", api_key=\\\"fake-key\\\")\\n            self.assertEqual(result[\\\"source\\\"], \\\"api\\\")\\n            self.assertEqual(result[\\\"model\\\"], app.DEFAULT_MODEL)\\n            self.assertEqual(result[\\\"response\\\"], \\\"Mocked API response\\\")\\n            mock_call.assert_called_once()\\n\\n    def test_create_comparison_report(self):\\n        \\\"\\\"\\\"Test comparison report creation.\\\"\\\"\\\"\\n        task = \\\"Test task\\\"\\n        prompt_a = \\\"Prompt A text\\\"\\n        prompt_b = \\\"Prompt B text\\\"\\n        result_a = {\\n            \\\"prompt\\\": prompt_a,\\n            \\\"response\\\": \\\"Response A\\\",\\n            \\\"source\\\": \\\"mock\\\",\\n            \\\"model\\\": \\\"mock\\\",\\n            \\\"temperature\\\": 0.7,\\n            \\\"max_tokens\\\": 150,\\n            \\\"timestamp\\\": \\\"2024-01-01T00:00:00\\\"\\n        }\\n        result_b = {\\n            \\\"prompt\\\": prompt_b,\\n            \\\"response\\\": \\\"Response B\\\",\\n            \\\"source\\\": \\\"mock\\\",\\n            \\\"model\\\": \\\"mock\\\",\\n            \\\"temperature\\\": 0.7,\\n            \\\"max_tokens\\\": 150,\\n            \\\"timestamp\\\": \\\"2024-01-01T00:00:00\\\"\\n        }\\n        \\n        report = app.create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\\n        \\n        self.assertEqual(report[\\\"task\\\"], task)\\n        self.assertEqual(report[\\\"prompt_a\\\"], prompt_a)\\n        self.assertEqual(report[\\\"prompt_b\\\"], prompt_b)\\n        self.assertEqual(report[\\\"response_a\\\"], \\\"Response A\\\")\\n        self.assertEqual(report[\\\"response_b\\\"], \\\"Response B\\\")\\n        self.assertEqual(report[\\\"source_a\\\"], \\\"mock\\\")\\n        self.assertEqual(report[\\\"source_b\\\"], \\\"mock\\\")\\n        self.assertIn(\\\"timestamp\\\", report)\\n\\n    def test_mock_responses_are_deterministic(self):\\n        \\\"\\\"\\\"Test that mock responses are truly deterministic.\\\"\\\"\\\"\\n        response1 = app.get_mock_response(\\\"A\\\")\\n        response2 = app.get_mock_response(\\\"A\\\")\\n        self.assertEqual(response1, response2)\\n        \\n        response1 = app.get_mock_response(\\\"B\\\")\\n        response2 = app.get_mock_response(\\\"B\\\")\\n        self.assertEqual(response1, response2)\\n        \\n        response1 = app.get_mock_response(\\\"Custom test prompt\\\")\\n        response2 = app.get_mock_response(\\\"Custom test prompt\\\")\\n        self.assertEqual(response1, response2)\\n\\n    def test_mock_responses_different_for_a_and_b(self):\\n        \\\"\\\"\\\"Test that mock responses for A and B are different.\\\"\\\"\\\"\\n        response_a = app.get_mock_response(\\\"A\\\")\\n        response_b = app.get_mock_response(\\\"B\\\")\\n        self.assertNotEqual(response_a, response_b)\\n\\n    def test_report_json_serializable(self):\\n        \\\"\\\"\\\"Test that the report can be serialized to JSON.\\\"\\\"\\\"\\n        task = \\\"Test task\\\"\\n        prompt_a = \\\"Prompt A\\\"\\n        prompt_b = \\\"Prompt B\\\"\\n        result_a = app.generate_response(prompt_a, \\\"A\\\", api_key=None)\\n        result_b = app.generate_response(prompt_b, \\\"B\\\", api_key=None)\\n        \\n        report = app.create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\\n        \\n        # Should not raise an exception\\n        json_str = json.dumps(report, indent=2)\\n        self.assertIsInstance(json_str, str)\\n        \\n        # Should be able to parse back\\n        parsed = json.loads(json_str)\\n        self.assertEqual(parsed[\\\"task\\\"], task)\\n\\n    def test_default_constants(self):\\n        \\\"\\\"\\\"Test that default constants are properly defined.\\\"\\\"\\\"\\n        self.assertEqual(app.DEFAULT_MODEL, \\\"gpt-3.5-turbo\\\")\\n        self.assertEqual(app.DEFAULT_TEMPERATURE, 0.7)\\n        self.assertEqual(app.DEFAULT_MAX_TOKENS, 150)\\n        self.assertIn(\\\"default\\\", app.MOCK_RESPONSES)\\n        self.assertIn(\\\"response_a\\\", app.MOCK_RESPONSES[\\\"default\\\"])\\n        self.assertIn(\\\"response_b\\\", app.MOCK_RESPONSES[\\\"default\\\"])\\n\\nif __name__ == '__main__':\\n    unittest.main()\\n\",\n    \"purpose\": \"Unit tests for core app functions without requiring network access or API keys.\"\n  }\n]",
+      "role": "Coder Agent",
+      "summary": "Generated actual project files using live model output."
+    }
+  ],
+  "api_mode_used": true,
+  "api_packaged": false,
+  "architecture": {
+    "data_flow": [
+      "User inputs task description and two prompt variants via Streamlit UI",
+      "App checks for OPENAI_API_KEY environment variable",
+      "If key exists: call OpenAI-compatible API with each prompt variant",
+      "If no key: use deterministic mock output generator",
+      "Record prompt, model name, settings, and generated responses",
+      "Display comparison report showing both responses side by side"
+    ],
+    "file_structure": [
+      "app.py - Main Streamlit application with UI and logic",
+      "test_app.py - Unit tests for core functionality without network access",
+      "requirements.txt - Python dependencies",
+      "README.md - Setup and usage instructions"
+    ],
+    "modules": [
+      "app.py",
+      "test_app.py",
+      "requirements.txt",
+      "README.md"
+    ],
+    "plan": [
+      {
+        "goal": "Create app.py with Streamlit UI for task input and prompt variants",
+        "id": "1",
+        "inputs": [
+          "Task description",
+          "Prompt variant A",
+          "Prompt variant B"
+        ],
+        "outputs": [
+          "Streamlit form with input fields",
+          "Submit button"
+        ],
+        "risk": "Low - standard Streamlit form creation"
+      },
+      {
+        "goal": "Implement API call logic with fallback to deterministic mock",
+        "id": "2",
+        "inputs": [
+          "Prompt text",
+          "API key (optional)"
+        ],
+        "outputs": [
+          "Generated response text"
+        ],
+        "risk": "Medium - need to handle API errors gracefully and ensure mock is deterministic"
+      },
+      {
+        "goal": "Build comparison report display",
+        "id": "3",
+        "inputs": [
+          "Prompt A response",
+          "Prompt B response",
+          "Metadata (model, settings)"
+        ],
+        "outputs": [
+          "Side-by-side comparison view",
+          "Downloadable report"
+        ],
+        "risk": "Low - standard Streamlit display components"
+      },
+      {
+        "goal": "Create test_app.py with unit tests",
+        "id": "4",
+        "inputs": [
+          "Mock functions",
+          "Test cases"
+        ],
+        "outputs": [
+          "Passing test suite"
+        ],
+        "risk": "Medium - must ensure tests don't require network or API keys"
+      },
+      {
+        "goal": "Write requirements.txt and README.md",
+        "id": "5",
+        "inputs": [
+          "Project dependencies",
+          "Setup instructions"
+        ],
+        "outputs": [
+          "requirements.txt file",
+          "README.md documentation"
+        ],
+        "risk": "Low - standard documentation"
+      }
+    ],
+    "summary": "Build a Streamlit app for comparing two LLM prompt variants with optional API integration and deterministic fallback, including a comparison report and unit tests."
+  },
+  "artifacts": {
+    "final_report": "outputs\\live_api_run\\final_report.md",
+    "generated_project_dir": "outputs\\live_api_run\\generated_project",
+    "generated_project_zip": "outputs\\live_api_run\\generated_project.zip",
+    "workflow_log": "outputs\\live_api_run\\WORKFLOW_LOG.md"
+  },
+  "finished_at": "2026-06-19T09:17:03Z",
+  "generated_files": [
+    {
+      "content": "import streamlit as st\nimport os\nimport json\nfrom datetime import datetime\n\n# Try to import OpenAI, but don't fail if not installed\ntry:\n    from openai import OpenAI\n    OPENAI_AVAILABLE = True\nexcept ImportError:\n    OPENAI_AVAILABLE = False\n\n# Default model configuration\nDEFAULT_MODEL = \"gpt-3.5-turbo\"\nDEFAULT_TEMPERATURE = 0.7\nDEFAULT_MAX_TOKENS = 150\n\n# Deterministic mock responses for when no API key is available\nMOCK_RESPONSES = {\n    \"default\": {\n        \"response_a\": \"This is a deterministic mock response for Prompt A. The task would be addressed by focusing on key requirements and delivering a structured solution.\",\n        \"response_b\": \"This is a deterministic mock response for Prompt B. The approach would involve analyzing the problem from multiple angles and providing a comprehensive answer.\"\n    }\n}\n\ndef get_mock_response(prompt_variant: str) -> str:\n    \"\"\"Generate a deterministic mock response based on the prompt variant.\"\"\"\n    if \"prompt a\" in prompt_variant.lower() or prompt_variant == \"A\":\n        return MOCK_RESPONSES[\"default\"][\"response_a\"]\n    elif \"prompt b\" in prompt_variant.lower() or prompt_variant == \"B\":\n        return MOCK_RESPONSES[\"default\"][\"response_b\"]\n    else:\n        # Generate a deterministic response based on the prompt content\n        import hashlib\n        hash_obj = hashlib.md5(prompt_variant.encode())\n        hash_hex = hash_obj.hexdigest()\n        return f\"Deterministic mock response for prompt with hash {hash_hex[:8]}. This is a fallback response generated without API access.\"\n\ndef call_openai_api(prompt: str, api_key: str, model: str = DEFAULT_MODEL, \n                    temperature: float = DEFAULT_TEMPERATURE, \n                    max_tokens: int = DEFAULT_MAX_TOKENS) -> str:\n    \"\"\"Call OpenAI-compatible API with the given prompt.\"\"\"\n    if not OPENAI_AVAILABLE:\n        return \"Error: OpenAI library not installed. Please install with: pip install openai\"\n    \n    try:\n        client = OpenAI(api_key=api_key)\n        response = client.chat.completions.create(\n            model=model,\n            messages=[\n                {\"role\": \"system\", \"content\": \"You are a helpful assistant.\"},\n                {\"role\": \"user\", \"content\": prompt}\n            ],\n            temperature=temperature,\n            max_tokens=max_tokens\n        )\n        return response.choices[0].message.content\n    except Exception as e:\n        return f\"Error calling API: {str(e)}\"\n\ndef generate_response(prompt: str, prompt_variant_label: str, api_key: str = None) -> dict:\n    \"\"\"Generate a response using API if key available, otherwise use mock.\"\"\"\n    if api_key and api_key.strip():\n        response_text = call_openai_api(prompt, api_key)\n        source = \"api\"\n    else:\n        response_text = get_mock_response(prompt_variant_label)\n        source = \"mock\"\n    \n    return {\n        \"prompt\": prompt,\n        \"response\": response_text,\n        \"source\": source,\n        \"model\": DEFAULT_MODEL if source == \"api\" else \"mock\",\n        \"temperature\": DEFAULT_TEMPERATURE,\n        \"max_tokens\": DEFAULT_MAX_TOKENS,\n        \"timestamp\": datetime.now().isoformat()\n    }\n\ndef create_comparison_report(task: str, prompt_a: str, prompt_b: str, \n                              result_a: dict, result_b: dict) -> dict:\n    \"\"\"Create a structured comparison report.\"\"\"\n    return {\n        \"task\": task,\n        \"prompt_a\": prompt_a,\n        \"prompt_b\": prompt_b,\n        \"response_a\": result_a[\"response\"],\n        \"response_b\": result_b[\"response\"],\n        \"model_a\": result_a[\"model\"],\n        \"model_b\": result_b[\"model\"],\n        \"source_a\": result_a[\"source\"],\n        \"source_b\": result_b[\"source\"],\n        \"temperature\": result_a[\"temperature\"],\n        \"max_tokens\": result_a[\"max_tokens\"],\n        \"timestamp\": datetime.now().isoformat()\n    }\n\ndef main():\n    st.set_page_config(page_title=\"LLM Prompt Comparison App\", layout=\"wide\")\n    \n    st.title(\"🤖 LLM Prompt Comparison App\")\n    st.markdown(\"Compare two prompt variants for the same task.\")\n    \n    # Sidebar for configuration\n    with st.sidebar:\n        st.header(\"Configuration\")\n        api_key = st.text_input(\"OpenAI API Key (optional)\", type=\"password\", \n                                help=\"Leave empty to use deterministic mock responses\")\n        \n        if api_key:\n            st.success(\"API key provided - will use OpenAI API\")\n        else:\n            st.info(\"No API key - using deterministic mock responses\")\n        \n        st.divider()\n        st.markdown(\"### Settings\")\n        model = st.text_input(\"Model\", value=DEFAULT_MODEL, disabled=not bool(api_key))\n        temperature = st.slider(\"Temperature\", 0.0, 2.0, DEFAULT_TEMPERATURE, 0.1, disabled=not bool(api_key))\n        max_tokens = st.number_input(\"Max Tokens\", 50, 500, DEFAULT_MAX_TOKENS, disabled=not bool(api_key))\n    \n    # Main content area\n    col1, col2 = st.columns(2)\n    \n    with col1:\n        st.subheader(\"Task Description\")\n        task = st.text_area(\"Enter the task for the LLM:\", height=100, \n                           placeholder=\"e.g., Write a short poem about AI\")\n    \n    with col2:\n        st.subheader(\"Comparison Settings\")\n        st.markdown(\"Enter two different prompt variants for the same task.\")\n    \n    st.divider()\n    \n    col_a, col_b = st.columns(2)\n    \n    with col_a:\n        st.subheader(\"Prompt Variant A\")\n        prompt_a = st.text_area(\"Enter Prompt A:\", height=150, key=\"prompt_a\",\n                               placeholder=\"e.g., Write a creative poem about artificial intelligence\")\n    \n    with col_b:\n        st.subheader(\"Prompt Variant B\")\n        prompt_b = st.text_area(\"Enter Prompt B:\", height=150, key=\"prompt_b\",\n                               placeholder=\"e.g., Compose a haiku about machine learning\")\n    \n    # Compare button\n    if st.button(\"Compare Prompts\", type=\"primary\", use_container_width=True):\n        if not task.strip():\n            st.error(\"Please enter a task description.\")\n        elif not prompt_a.strip() or not prompt_b.strip():\n            st.error(\"Please enter both prompt variants.\")\n        else:\n            with st.spinner(\"Generating responses...\"):\n                # Generate responses\n                result_a = generate_response(prompt_a, \"A\", api_key)\n                result_b = generate_response(prompt_b, \"B\", api_key)\n                \n                # Create comparison report\n                report = create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\n                \n                # Store in session state for persistence\n                st.session_state[\"last_report\"] = report\n                st.session_state[\"result_a\"] = result_a\n                st.session_state[\"result_b\"] = result_b\n    \n    # Display results if available\n    if \"last_report\" in st.session_state:\n        report = st.session_state[\"last_report\"]\n        result_a = st.session_state[\"result_a\"]\n        result_b = st.session_state[\"result_b\"]\n        \n        st.divider()\n        st.header(\"📊 Comparison Report\")\n        \n        # Metadata section\n        with st.expander(\"Report Metadata\", expanded=False):\n            col_m1, col_m2, col_m3 = st.columns(3)\n            with col_m1:\n                st.metric(\"Task\", report[\"task\"][:50] + \"...\" if len(report[\"task\"]) > 50 else report[\"task\"])\n            with col_m2:\n                st.metric(\"Temperature\", report[\"temperature\"])\n            with col_m3:\n                st.metric(\"Max Tokens\", report[\"max_tokens\"])\n            \n            st.markdown(f\"**Timestamp:** {report['timestamp']}\")\n        \n        # Response comparison\n        col_r1, col_r2 = st.columns(2)\n        \n        with col_r1:\n            st.subheader(\"Prompt A Response\")\n            st.markdown(f\"**Source:** {'API' if result_a['source'] == 'api' else 'Mock'}\")\n            st.markdown(f\"**Model:** {result_a['model']}\")\n            st.info(result_a[\"response\"])\n        \n        with col_r2:\n            st.subheader(\"Prompt B Response\")\n            st.markdown(f\"**Source:** {'API' if result_b['source'] == 'api' else 'Mock'}\")\n            st.markdown(f\"**Model:** {result_b['model']}\")\n            st.info(result_b[\"response\"])\n        \n        # Full prompt display\n        with st.expander(\"View Full Prompts\"):\n            st.markdown(\"### Prompt A\")\n            st.code(report[\"prompt_a\"], language=\"text\")\n            st.markdown(\"### Prompt B\")\n            st.code(report[\"prompt_b\"], language=\"text\")\n        \n        # Download report\n        report_json = json.dumps(report, indent=2)\n        st.download_button(\n            label=\"Download Report (JSON)\",\n            data=report_json,\n            file_name=f\"prompt_comparison_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json\",\n            mime=\"application/json\"\n        )\n\nif __name__ == \"__main__\":\n    main()\n",
+      "path": "app.py",
+      "purpose": "Main Streamlit application with UI, API call logic, deterministic mock fallback, and comparison report generation."
+    },
+    {
+      "content": "streamlit>=1.28.0\nopenai>=1.0.0\n",
+      "path": "requirements.txt",
+      "purpose": "Python dependencies for the project."
+    },
+    {
+      "content": "# LLM Prompt Comparison App\n\nA Streamlit application for comparing two LLM prompt variants side by side.\n\n## Features\n\n- Input a task and two prompt variants\n- Optional OpenAI API integration (when API key is provided)\n- Deterministic mock responses when no API key is available\n- Side-by-side comparison report\n- Downloadable JSON report\n\n## Setup\n\n1. Clone the repository:\n   ```bash\n   git clone <repository-url>\n   cd llm-prompt-comparison\n   ```\n\n2. Install dependencies:\n   ```bash\n   pip install -r requirements.txt\n   ```\n\n3. Run the application:\n   ```bash\n   streamlit run app.py\n   ```\n\n## Usage\n\n1. Open the app in your browser (default: http://localhost:8501)\n2. (Optional) Enter your OpenAI API key in the sidebar for real API responses\n3. Enter a task description\n4. Enter two prompt variants (Prompt A and Prompt B)\n5. Click \"Compare Prompts\"\n6. View the comparison report with responses side by side\n7. Download the report as JSON if needed\n\n## Testing\n\nRun tests with:\n```bash\npython -m unittest discover -s tests\n```\n\nTests do not require network access or API keys.\n\n## Project Structure\n\n```\n.\n├── app.py              # Main Streamlit application\n├── requirements.txt    # Python dependencies\n├── README.md          # This file\n└── tests/\n    └── test_basic.py  # Unit tests\n```\n\n## How It Works\n\n- When an API key is provided, the app calls the OpenAI-compatible API\n- When no API key is available, the app uses deterministic mock responses\n- The comparison report includes prompts, model names, settings, and generated responses\n- All responses are recorded with timestamps for reproducibility\n",
+      "path": "README.md",
+      "purpose": "Project documentation with setup and usage instructions."
+    },
+    {
+      "content": "import unittest\nimport sys\nimport os\nimport json\nfrom unittest.mock import patch, MagicMock\n\n# Add parent directory to path to import app\nsys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))\n\n# Import the app module\nimport app\n\nclass TestAppCoreFunctions(unittest.TestCase):\n    \"\"\"Test core functions of the app without Streamlit runtime.\"\"\"\n\n    def test_get_mock_response_prompt_a(self):\n        \"\"\"Test deterministic mock response for Prompt A.\"\"\"\n        response = app.get_mock_response(\"A\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_a\"])\n        \n        response = app.get_mock_response(\"prompt a\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_a\"])\n        \n        response = app.get_mock_response(\"Prompt A\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_a\"])\n\n    def test_get_mock_response_prompt_b(self):\n        \"\"\"Test deterministic mock response for Prompt B.\"\"\"\n        response = app.get_mock_response(\"B\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_b\"])\n        \n        response = app.get_mock_response(\"prompt b\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_b\"])\n        \n        response = app.get_mock_response(\"Prompt B\")\n        self.assertEqual(response, app.MOCK_RESPONSES[\"default\"][\"response_b\"])\n\n    def test_get_mock_response_other(self):\n        \"\"\"Test deterministic mock response for other prompts.\"\"\"\n        response = app.get_mock_response(\"Some custom prompt\")\n        self.assertIn(\"Deterministic mock response\", response)\n        self.assertIn(\"hash\", response.lower())\n        \n        # Test determinism: same input should give same output\n        response2 = app.get_mock_response(\"Some custom prompt\")\n        self.assertEqual(response, response2)\n\n    def test_generate_response_no_api_key(self):\n        \"\"\"Test generate_response without API key uses mock.\"\"\"\n        result = app.generate_response(\"Test prompt\", \"A\", api_key=None)\n        self.assertEqual(result[\"source\"], \"mock\")\n        self.assertEqual(result[\"model\"], \"mock\")\n        self.assertEqual(result[\"response\"], app.MOCK_RESPONSES[\"default\"][\"response_a\"])\n        \n        result = app.generate_response(\"Test prompt\", \"B\", api_key=\"\")\n        self.assertEqual(result[\"source\"], \"mock\")\n        self.assertEqual(result[\"response\"], app.MOCK_RESPONSES[\"default\"][\"response_b\"])\n\n    def test_generate_response_with_api_key(self):\n        \"\"\"Test generate_response with API key attempts API call.\"\"\"\n        # Mock the OpenAI call to avoid network access\n        with patch('app.call_openai_api') as mock_call:\n            mock_call.return_value = \"Mocked API response\"\n            result = app.generate_response(\"Test prompt\", \"A\", api_key=\"fake-key\")\n            self.assertEqual(result[\"source\"], \"api\")\n            self.assertEqual(result[\"model\"], app.DEFAULT_MODEL)\n            self.assertEqual(result[\"response\"], \"Mocked API response\")\n            mock_call.assert_called_once()\n\n    def test_create_comparison_report(self):\n        \"\"\"Test comparison report creation.\"\"\"\n        task = \"Test task\"\n        prompt_a = \"Prompt A text\"\n        prompt_b = \"Prompt B text\"\n        result_a = {\n            \"prompt\": prompt_a,\n            \"response\": \"Response A\",\n            \"source\": \"mock\",\n            \"model\": \"mock\",\n            \"temperature\": 0.7,\n            \"max_tokens\": 150,\n            \"timestamp\": \"2024-01-01T00:00:00\"\n        }\n        result_b = {\n            \"prompt\": prompt_b,\n            \"response\": \"Response B\",\n            \"source\": \"mock\",\n            \"model\": \"mock\",\n            \"temperature\": 0.7,\n            \"max_tokens\": 150,\n            \"timestamp\": \"2024-01-01T00:00:00\"\n        }\n        \n        report = app.create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\n        \n        self.assertEqual(report[\"task\"], task)\n        self.assertEqual(report[\"prompt_a\"], prompt_a)\n        self.assertEqual(report[\"prompt_b\"], prompt_b)\n        self.assertEqual(report[\"response_a\"], \"Response A\")\n        self.assertEqual(report[\"response_b\"], \"Response B\")\n        self.assertEqual(report[\"source_a\"], \"mock\")\n        self.assertEqual(report[\"source_b\"], \"mock\")\n        self.assertIn(\"timestamp\", report)\n\n    def test_mock_responses_are_deterministic(self):\n        \"\"\"Test that mock responses are truly deterministic.\"\"\"\n        response1 = app.get_mock_response(\"A\")\n        response2 = app.get_mock_response(\"A\")\n        self.assertEqual(response1, response2)\n        \n        response1 = app.get_mock_response(\"B\")\n        response2 = app.get_mock_response(\"B\")\n        self.assertEqual(response1, response2)\n        \n        response1 = app.get_mock_response(\"Custom test prompt\")\n        response2 = app.get_mock_response(\"Custom test prompt\")\n        self.assertEqual(response1, response2)\n\n    def test_mock_responses_different_for_a_and_b(self):\n        \"\"\"Test that mock responses for A and B are different.\"\"\"\n        response_a = app.get_mock_response(\"A\")\n        response_b = app.get_mock_response(\"B\")\n        self.assertNotEqual(response_a, response_b)\n\n    def test_report_json_serializable(self):\n        \"\"\"Test that the report can be serialized to JSON.\"\"\"\n        task = \"Test task\"\n        prompt_a = \"Prompt A\"\n        prompt_b = \"Prompt B\"\n        result_a = app.generate_response(prompt_a, \"A\", api_key=None)\n        result_b = app.generate_response(prompt_b, \"B\", api_key=None)\n        \n        report = app.create_comparison_report(task, prompt_a, prompt_b, result_a, result_b)\n        \n        # Should not raise an exception\n        json_str = json.dumps(report, indent=2)\n        self.assertIsInstance(json_str, str)\n        \n        # Should be able to parse back\n        parsed = json.loads(json_str)\n        self.assertEqual(parsed[\"task\"], task)\n\n    def test_default_constants(self):\n        \"\"\"Test that default constants are properly defined.\"\"\"\n        self.assertEqual(app.DEFAULT_MODEL, \"gpt-3.5-turbo\")\n        self.assertEqual(app.DEFAULT_TEMPERATURE, 0.7)\n        self.assertEqual(app.DEFAULT_MAX_TOKENS, 150)\n        self.assertIn(\"default\", app.MOCK_RESPONSES)\n        self.assertIn(\"response_a\", app.MOCK_RESPONSES[\"default\"])\n        self.assertIn(\"response_b\", app.MOCK_RESPONSES[\"default\"])\n\nif __name__ == '__main__':\n    unittest.main()\n",
+      "path": "tests/test_basic.py",
+      "purpose": "Unit tests for core app functions without requiring network access or API keys."
+    }
+  ],
+  "judge_report": {
+    "final_summary": "The generated project fully satisfies the HW7 agentic workflow requirements. It includes a clear TaskSpec with objective, constraints, target stack, and success criteria. The architecture defines modules, data flow, file structure, and a detailed plan. The generated code (app.py) implements the Streamlit app with API call logic, deterministic mock fallback, comparison report generation, and download functionality. The project includes all required files: app.py, requirements.txt, README.md, and tests/test_basic.py. The tests pass without network access or API keys, covering mock responses, API fallback, report creation, and determinism. The validations confirm successful compilation and all 10 tests passing.",
+    "missing_requirements": [],
+    "pass_status": true,
+    "prompt": "Return JSON matching this schema:\n{\"pass_status\": bool, \"missing_requirements\": [str], \"suggested_fixes\": [str], \"final_summary\": str}\n\nJudge whether the generated project satisfies the HW7 agentic workflow:\nTaskSpec, architecture, generated code, validation, artifacts, report readiness.",
+    "raw_response": "{\n  \"pass_status\": true,\n  \"missing_requirements\": [],\n  \"suggested_fixes\": [],\n  \"final_summary\": \"The generated project fully satisfies the HW7 agentic workflow requirements. It includes a clear TaskSpec with objective, constraints, target stack, and success criteria. The architecture defines modules, data flow, file structure, and a detailed plan. The generated code (app.py) implements the Streamlit app with API call logic, deterministic mock fallback, comparison report generation, and download functionality. The project includes all required files: app.py, requirements.txt, README.md, and tests/test_basic.py. The tests pass without network access or API keys, covering mock responses, API fallback, report creation, and determinism. The validations confirm successful compilation and all 10 tests passing.\"\n}",
+    "suggested_fixes": []
+  },
+  "mode": "api",
+  "project_idea": "Build a Streamlit app for an LLM prompt comparison experiment.\n\nThe generated app should let the user enter a task, compare two prompt variants,\noptionally call an OpenAI-compatible LLM API when an API key is available, and\nfall back to deterministic mock output when no key is available.\n\nThe app should record prompt, model name, settings, generated responses, and\nproduce a simple comparison report.\n\nThe generated project must include app.py, requirements.txt, README.md, and\nunittest tests that do not require network access or API keys.\n",
+  "provider": {
+    "base_url": "https://api.deepseek.com/v1",
+    "discussion_model": "deepseek-chat",
+    "writer_model": "deepseek-chat"
+  },
+  "reporter": {
+    "artifacts_to_create": [
+      "run.json",
+      "WORKFLOW_LOG.md",
+      "final_report.md",
+      "generated_project.zip"
+    ],
+    "decisions": [
+      "Write run.json",
+      "Write WORKFLOW_LOG.md",
+      "Write final_report.md",
+      "Zip generated_project"
+    ],
+    "next_steps": [
+      "Record demo video/screenshot and submit repository link."
+    ],
+    "prompt": "",
+    "raw_response": "",
+    "role": "Reporter",
+    "summary": "Collected generated files, validation output, judge result, and final downloadable artifacts."
+  },
+  "schema_version": 2,
+  "started_at": "2026-06-19T09:16:21Z",
+  "task_spec": {
+    "constraints": [
+      "No credentials, private paths, SSH, or remote GPU requirements.",
+      "Must include app.py, requirements.txt, README.md, and unittest tests.",
+      "Tests must not require network access or API keys.",
+      "Must fall back to deterministic mock output when no API key is available.",
+      "Must record prompt, model name, settings, and generated responses.",
+      "Must produce a simple comparison report."
+    ],
+    "objective": "Build a Streamlit app that allows users to enter a task, compare two prompt variants, optionally call an OpenAI-compatible LLM API when an API key is available, and fall back to deterministic mock output when no key is available. The app should record prompt, model name, settings, generated responses, and produce a simple comparison report. The generated project must include app.py, requirements.txt, README.md, and unittest tests that do not require network access or API keys.",
+    "success_criteria": [
+      "Streamlit app runs locally with `streamlit run app.py`.",
+      "User can input a task and two prompt variants.",
+      "When API key is set, app calls OpenAI-compatible API and displays responses.",
+      "When no API key is set, app uses deterministic mock output.",
+      "App records and displays comparison report (prompts, model, settings, responses).",
+      "All tests pass without network access or API keys.",
+      "Project includes app.py, requirements.txt, README.md, and test files."
+    ],
+    "target_stack": [
+      "Python 3.9+",
+      "Streamlit",
+      "OpenAI Python client (optional, for API calls)",
+      "unittest (for testing)"
+    ],
+    "title": "LLM Prompt Comparison App"
+  },
+  "validations": [
+    {
+      "artifacts_found": [
+        "app.py",
+        "README.md",
+        "requirements.txt",
+        "tests\\test_basic.py",
+        "__pycache__\\app.cpython-313.pyc",
+        "tests\\__pycache__\\test_basic.cpython-313.pyc"
+      ],
+      "command": "python -m compileall generated_project",
+      "stderr": "",
+      "stdout": "Listing 'generated_project'...\nCompiling 'generated_project\\\\app.py'...\nListing 'generated_project\\\\tests'...\nCompiling 'generated_project\\\\tests\\\\test_basic.py'...\n",
+      "success": true
+    },
+    {
+      "artifacts_found": [
+        "app.py",
+        "README.md",
+        "requirements.txt",
+        "tests\\test_basic.py",
+        "__pycache__\\app.cpython-313.pyc",
+        "tests\\__pycache__\\test_basic.cpython-313.pyc"
+      ],
+      "command": "python -m unittest discover -s tests",
+      "stderr": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.001s\n\nOK\n",
+      "stdout": "",
+      "success": true
+    }
+  ]
+}

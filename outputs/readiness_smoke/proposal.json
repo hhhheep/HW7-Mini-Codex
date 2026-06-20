@@ -1,0 +1,93 @@
+{
+  "schema_version": 3,
+  "kind": "mini_codex_proposal",
+  "created_at": "2026-06-19T18:53:13.925767+00:00",
+  "mode": "mock_test",
+  "api_mode_used": false,
+  "provider": null,
+  "user_message": "Add a generation history table that records each prompt and response.",
+  "context": {
+    "workspace_path": "C:\\Users\\27419\\Desktop\\ai-tools\\hw7-multi-agent-coding-council\\workspace\\generated_project",
+    "selected_files": [
+      {
+        "path": "app.py",
+        "sha256": "e0d98ef21c26c25f75bee99fbf46080f67c8f30caf7db1c142af9293150e88c8",
+        "content": "from __future__ import annotations\n\nimport streamlit as st\n\nfrom experiment_store import create_record\nfrom llm_client import generate_response\n\n\nst.set_page_config(page_title=\"Mini LLM Demo\", layout=\"wide\")\nst.title(\"Mini LLM Demo\")\nst.write(\"Enter a task and generate a mock or API-backed LLM response.\")\n\nprompt = st.text_area(\"Task prompt\", \"Explain what an LLM agent does in one paragraph.\")\nmodel_name = st.text_input(\"Model name\", \"mock-local\")\ntemperature = st.slider(\"Temperature\", 0.0, 1.0, 0.2, 0.1)\ngenerate = st.button(\"Generate response\")\n\nresponse = \"\"\nif generate:\n    response = generate_response(prompt, model_name=model_name, temperature=temperature)\n    st.subheader(\"Latest response\")\n    st.write(response)\nelse:\n    st.info(\"Enter a task and click Generate response.\")\n\nlatest_record = create_record(prompt, response, model_name=model_name)\nst.caption(f\"Current record model: {latest_record['model_name']}\")\n\n"
+      },
+      {
+        "path": "experiment_store.py",
+        "sha256": "e13b93e798d2763f08a730612cf063748d2405106264bae4d87d426fa395c6a5",
+        "content": "from __future__ import annotations\n\nfrom datetime import datetime, timezone\n\n\ndef create_record(prompt: str, response: str, model_name: str = \"mock-local\") -> dict[str, str]:\n    return {\n        \"prompt\": prompt,\n        \"response\": response,\n        \"model_name\": model_name,\n        \"created_at\": datetime.now(timezone.utc).isoformat(),\n    }\n\n"
+      },
+      {
+        "path": "llm_client.py",
+        "sha256": "f272c8f19450a3d2189a5c5bed57627f9ea8d6bb70c4298c704b8e635ae8dd4b",
+        "content": "from __future__ import annotations\n\nimport hashlib\n\n\ndef generate_response(prompt: str, model_name: str = \"mock-local\", temperature: float = 0.2) -> str:\n    \"\"\"Return a deterministic local response for tests and no-key demos.\"\"\"\n    normalized = \" \".join(prompt.strip().split()) or \"empty prompt\"\n    digest = hashlib.sha256(f\"{normalized}|{model_name}|{temperature}\".encode(\"utf-8\")).hexdigest()[:10]\n    return f\"[{model_name}] Response {digest}: {normalized}\"\n"
+      },
+      {
+        "path": "README.md",
+        "sha256": "119a1d060eb301630b04289debe2b119ced25fc9cc93537a88671fd97b3455b5",
+        "content": "# Mini LLM Demo Workspace\n\nThis is the editable sample project used by the Mini-Codex workbench.\n\n## Features\n\n- Generate a deterministic local LLM-style response\n\n## Run\n\n```powershell\nstreamlit run app.py\n```\n\n## Test\n\n```powershell\npython -m unittest discover -s tests\n```\n"
+      },
+      {
+        "path": "tests/test_basic.py",
+        "sha256": "c90962cb75b3eeded5b23c0cf3893a1f639aff3403f852a2dfae4e228674631f",
+        "content": "from __future__ import annotations\n\nimport unittest\n\nfrom experiment_store import create_record\nfrom llm_client import generate_response\n\n\nclass WorkspaceTest(unittest.TestCase):\n    def test_mock_response_is_deterministic(self) -> None:\n        first = generate_response(\"hello\", model_name=\"mock\", temperature=0.2)\n        second = generate_response(\"hello\", model_name=\"mock\", temperature=0.2)\n        self.assertEqual(first, second)\n\n    def test_create_record_keeps_prompt_response_and_model(self) -> None:\n        record = create_record(\"prompt\", \"response\", model_name=\"mock\")\n        self.assertEqual(record[\"prompt\"], \"prompt\")\n        self.assertEqual(record[\"response\"], \"response\")\n        self.assertEqual(record[\"model_name\"], \"mock\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n"
+      }
+    ],
+    "rejected_files": [],
+    "project_summary": "Editable workspace files: app.py (e0d98ef2), experiment_store.py (e13b93e7), llm_client.py (f272c8f1), README.md (119a1d06), tests/test_basic.py (c90962cb)"
+  },
+  "changeset": {
+    "change_id": "mock_a2bd54e0",
+    "summary": "Add generation history table.",
+    "user_intent": "Add a generation history table that records each prompt and response.",
+    "files": [
+      {
+        "path": "app.py",
+        "old_content_hash": "e0d98ef21c26c25f75bee99fbf46080f67c8f30caf7db1c142af9293150e88c8",
+        "new_content": "from __future__ import annotations\n\nimport streamlit as st\n\nfrom experiment_store import create_record, add_record, history_to_table\nfrom llm_client import generate_response\n\n\nst.set_page_config(page_title=\"Mini LLM Demo\", layout=\"wide\")\nst.title(\"Mini LLM Demo\")\nst.write(\"Enter a task and generate a mock or API-backed LLM response.\")\n\nprompt = st.text_area(\"Task prompt\", \"Explain what an LLM agent does in one paragraph.\")\nmodel_name = st.text_input(\"Model name\", \"mock-local\")\ntemperature = st.slider(\"Temperature\", 0.0, 1.0, 0.2, 0.1)\ngenerate = st.button(\"Generate response\")\n\nresponse = \"\"\nif generate:\n    response = generate_response(prompt, model_name=model_name, temperature=temperature)\n    st.subheader(\"Latest response\")\n    st.write(response)\nelse:\n    st.info(\"Enter a task and click Generate response.\")\n\nlatest_record = create_record(prompt, response, model_name=model_name)\nst.caption(f\"Current record model: {latest_record['model_name']}\")\n\nif \"history\" not in st.session_state:\n    st.session_state[\"history\"] = []\n\nif generate:\n    st.session_state[\"history\"] = add_record(st.session_state[\"history\"], prompt, response)\n\nst.subheader(\"Generation history\")\nrows = history_to_table(st.session_state[\"history\"])\nif rows:\n    st.dataframe(rows, use_container_width=True)\nelse:\n    st.caption(\"No generations yet.\")\n\n",
+        "reason": "Implement request: Add generation history table."
+      },
+      {
+        "path": "experiment_store.py",
+        "old_content_hash": "e13b93e798d2763f08a730612cf063748d2405106264bae4d87d426fa395c6a5",
+        "new_content": "from __future__ import annotations\n\nfrom datetime import datetime, timezone\n\n\ndef create_record(prompt: str, response: str, model_name: str = \"mock-local\") -> dict[str, str]:\n    return {\n        \"prompt\": prompt,\n        \"response\": response,\n        \"model_name\": model_name,\n        \"created_at\": datetime.now(timezone.utc).isoformat(),\n    }\n\n\ndef add_record(history: list[dict[str, str]], prompt: str, response: str, model_name: str = \"mock-local\") -> list[dict[str, str]]:\n    if not response:\n        return list(history)\n    return [*history, create_record(prompt, response, model_name=model_name)]\n\n\ndef history_to_table(history: list[dict[str, str]]) -> list[dict[str, str]]:\n    return [\n        {\n            \"prompt\": item.get(\"prompt\", \"\"),\n            \"response\": item.get(\"response\", \"\"),\n            \"model_name\": item.get(\"model_name\", \"\"),\n            \"created_at\": item.get(\"created_at\", \"\"),\n        }\n        for item in history\n    ]\n\n",
+        "reason": "Implement request: Add generation history table."
+      },
+      {
+        "path": "tests/test_basic.py",
+        "old_content_hash": "c90962cb75b3eeded5b23c0cf3893a1f639aff3403f852a2dfae4e228674631f",
+        "new_content": "from __future__ import annotations\n\nimport unittest\n\nfrom experiment_store import create_record, add_record, history_to_table\nfrom llm_client import generate_response\n\n\nclass WorkspaceTest(unittest.TestCase):\n    def test_mock_response_is_deterministic(self) -> None:\n        first = generate_response(\"hello\", model_name=\"mock\", temperature=0.2)\n        second = generate_response(\"hello\", model_name=\"mock\", temperature=0.2)\n        self.assertEqual(first, second)\n\n    def test_create_record_keeps_prompt_response_and_model(self) -> None:\n        record = create_record(\"prompt\", \"response\", model_name=\"mock\")\n        self.assertEqual(record[\"prompt\"], \"prompt\")\n        self.assertEqual(record[\"response\"], \"response\")\n        self.assertEqual(record[\"model_name\"], \"mock\")\n\n    def test_history_records_prompt_and_response(self) -> None:\n        rows = add_record([], \"prompt\", \"response\", model_name=\"mock\")\n        table = history_to_table(rows)\n        self.assertEqual(table[0][\"prompt\"], \"prompt\")\n        self.assertEqual(table[0][\"response\"], \"response\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+        "reason": "Implement request: Add generation history table."
+      }
+    ],
+    "expected_visible_change": "The preview app shows a table of prompts, responses, and timestamps.",
+    "validation_commands": [
+      "python -m compileall workspace/generated_project",
+      "python -m unittest discover -s workspace/generated_project/tests"
+    ],
+    "risks": [
+      "Mock mode is deterministic evidence, not a live model-backed patch."
+    ],
+    "prompt": "",
+    "raw_response": ""
+  },
+  "diffs": [
+    {
+      "path": "app.py",
+      "reason": "Implement request: Add generation history table.",
+      "diff": "--- a/app.py\n+++ b/app.py\n@@ -2,7 +2,7 @@\n \n import streamlit as st\n \n-from experiment_store import create_record\n+from experiment_store import create_record, add_record, history_to_table\n from llm_client import generate_response\n \n \n@@ -26,3 +26,16 @@\n latest_record = create_record(prompt, response, model_name=model_name)\n st.caption(f\"Current record model: {latest_record['model_name']}\")\n \n+if \"history\" not in st.session_state:\n+    st.session_state[\"history\"] = []\n+\n+if generate:\n+    st.session_state[\"history\"] = add_record(st.session_state[\"history\"], prompt, response)\n+\n+st.subheader(\"Generation history\")\n+rows = history_to_table(st.session_state[\"history\"])\n+if rows:\n+    st.dataframe(rows, use_container_width=True)\n+else:\n+    st.caption(\"No generations yet.\")\n+"
+    },
+    {
+      "path": "experiment_store.py",
+      "reason": "Implement request: Add generation history table.",
+      "diff": "--- a/experiment_store.py\n+++ b/experiment_store.py\n@@ -11,3 +11,21 @@\n         \"created_at\": datetime.now(timezone.utc).isoformat(),\n     }\n \n+\n+def add_record(history: list[dict[str, str]], prompt: str, response: str, model_name: str = \"mock-local\") -> list[dict[str, str]]:\n+    if not response:\n+        return list(history)\n+    return [*history, create_record(prompt, response, model_name=model_name)]\n+\n+\n+def history_to_table(history: list[dict[str, str]]) -> list[dict[str, str]]:\n+    return [\n+        {\n+            \"prompt\": item.get(\"prompt\", \"\"),\n+            \"response\": item.get(\"response\", \"\"),\n+            \"model_name\": item.get(\"model_name\", \"\"),\n+            \"created_at\": item.get(\"created_at\", \"\"),\n+        }\n+        for item in history\n+    ]\n+"
+    },
+    {
+      "path": "tests/test_basic.py",
+      "reason": "Implement request: Add generation history table.",
+      "diff": "--- a/tests/test_basic.py\n+++ b/tests/test_basic.py\n@@ -2,7 +2,7 @@\n \n import unittest\n \n-from experiment_store import create_record\n+from experiment_store import create_record, add_record, history_to_table\n from llm_client import generate_response\n \n \n@@ -18,6 +18,12 @@\n         self.assertEqual(record[\"response\"], \"response\")\n         self.assertEqual(record[\"model_name\"], \"mock\")\n \n+    def test_history_records_prompt_and_response(self) -> None:\n+        rows = add_record([], \"prompt\", \"response\", model_name=\"mock\")\n+        table = history_to_table(rows)\n+        self.assertEqual(table[0][\"prompt\"], \"prompt\")\n+        self.assertEqual(table[0][\"response\"], \"response\")\n+\n \n if __name__ == \"__main__\":\n     unittest.main()"
+    }
+  ]
+}

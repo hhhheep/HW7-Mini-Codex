@@ -1,0 +1,4 @@
+Build a small Streamlit generative-AI prompt experiment app. The generated
+project should let a user record prompt variants, seed values, expected model
+behavior, and result notes. It should include a README, requirements file, and a
+basic validation test so the orchestrator can package and judge the result.

@@ -1,0 +1,67 @@
+{
+  "schema_version": 3,
+  "kind": "mini_codex_proposal",
+  "created_at": "2026-06-20T07:40:04.991312+00:00",
+  "mode": "mock_test",
+  "api_mode_used": false,
+  "provider": null,
+  "user_message": "Create a Python CLI project with main.py and offline tests.",
+  "context": {
+    "workspace_path": "C:\\Users\\27419\\Desktop\\ai-tools\\hw7-multi-agent-coding-council\\workspace\\empty_from_zero_smoke",
+    "selected_files": [],
+    "rejected_files": [],
+    "project_summary": "No editable files found."
+  },
+  "changeset": {
+    "change_id": "mock_ffa05189",
+    "summary": "Create a Python CLI project.",
+    "user_intent": "Create a Python CLI project with main.py and offline tests.",
+    "files": [
+      {
+        "path": "main.py",
+        "old_content_hash": null,
+        "new_content": "from __future__ import annotations\n\nimport argparse\n\n\ndef build_message(name: str, excited: bool = False) -> str:\n    suffix = \"!\" if excited else \".\"\n    return f\"Hello, {name}{suffix}\"\n\n\ndef main() -> None:\n    parser = argparse.ArgumentParser(description=\"Mini-Codex generated CLI\")\n    parser.add_argument(\"name\", nargs=\"?\", default=\"student\")\n    parser.add_argument(\"--excited\", action=\"store_true\")\n    args = parser.parse_args()\n    print(build_message(args.name, excited=args.excited))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      },
+      {
+        "path": "README.md",
+        "old_content_hash": null,
+        "new_content": "# Mini-Codex Generated Python Project\n\nCreated from an empty workspace.\n\nOriginal request:\n\n```text\nCreate a Python CLI project with main.py and offline tests.\n```\n\n## Run\n\n```powershell\npython main.py\n```\n\n## Test\n\n```powershell\npython -m unittest discover -s tests\n```\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      },
+      {
+        "path": "tests/test_basic.py",
+        "old_content_hash": null,
+        "new_content": "from __future__ import annotations\n\nimport unittest\n\nfrom main import build_message\n\n\nclass GeneratedCliTest(unittest.TestCase):\n    def test_build_message(self) -> None:\n        self.assertEqual(build_message(\"Ada\"), \"Hello, Ada.\")\n        self.assertEqual(build_message(\"Ada\", excited=True), \"Hello, Ada!\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      }
+    ],
+    "expected_visible_change": "The workspace contains a runnable Python CLI module and offline tests.",
+    "validation_commands": [
+      "python -m compileall C:\\Users\\27419\\Desktop\\ai-tools\\hw7-multi-agent-coding-council\\workspace\\empty_from_zero_smoke",
+      "python -m unittest discover -s tests"
+    ],
+    "risks": [
+      "Mock mode is deterministic evidence, not a live model-backed patch."
+    ],
+    "prompt": "",
+    "raw_response": ""
+  },
+  "diffs": [
+    {
+      "path": "main.py",
+      "reason": "Create new file for request: Create a Python CLI project.",
+      "diff": "--- a/main.py\n+++ b/main.py\n@@ -0,0 +1,20 @@\n+from __future__ import annotations\n+\n+import argparse\n+\n+\n+def build_message(name: str, excited: bool = False) -> str:\n+    suffix = \"!\" if excited else \".\"\n+    return f\"Hello, {name}{suffix}\"\n+\n+\n+def main() -> None:\n+    parser = argparse.ArgumentParser(description=\"Mini-Codex generated CLI\")\n+    parser.add_argument(\"name\", nargs=\"?\", default=\"student\")\n+    parser.add_argument(\"--excited\", action=\"store_true\")\n+    args = parser.parse_args()\n+    print(build_message(args.name, excited=args.excited))\n+\n+\n+if __name__ == \"__main__\":\n+    main()"
+    },
+    {
+      "path": "README.md",
+      "reason": "Create new file for request: Create a Python CLI project.",
+      "diff": "--- a/README.md\n+++ b/README.md\n@@ -0,0 +1,21 @@\n+# Mini-Codex Generated Python Project\n+\n+Created from an empty workspace.\n+\n+Original request:\n+\n+```text\n+Create a Python CLI project with main.py and offline tests.\n+```\n+\n+## Run\n+\n+```powershell\n+python main.py\n+```\n+\n+## Test\n+\n+```powershell\n+python -m unittest discover -s tests\n+```"
+    },
+    {
+      "path": "tests/test_basic.py",
+      "reason": "Create new file for request: Create a Python CLI project.",
+      "diff": "--- a/tests/test_basic.py\n+++ b/tests/test_basic.py\n@@ -0,0 +1,15 @@\n+from __future__ import annotations\n+\n+import unittest\n+\n+from main import build_message\n+\n+\n+class GeneratedCliTest(unittest.TestCase):\n+    def test_build_message(self) -> None:\n+        self.assertEqual(build_message(\"Ada\"), \"Hello, Ada.\")\n+        self.assertEqual(build_message(\"Ada\", excited=True), \"Hello, Ada!\")\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()"
+    }
+  ]
+}

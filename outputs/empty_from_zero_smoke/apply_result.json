@@ -1,0 +1,75 @@
+{
+  "schema_version": 3,
+  "kind": "mini_codex_apply",
+  "created_at": "2026-06-20T07:40:05.151797+00:00",
+  "changeset": {
+    "change_id": "mock_ffa05189",
+    "summary": "Create a Python CLI project.",
+    "user_intent": "Create a Python CLI project with main.py and offline tests.",
+    "files": [
+      {
+        "path": "main.py",
+        "old_content_hash": null,
+        "new_content": "from __future__ import annotations\n\nimport argparse\n\n\ndef build_message(name: str, excited: bool = False) -> str:\n    suffix = \"!\" if excited else \".\"\n    return f\"Hello, {name}{suffix}\"\n\n\ndef main() -> None:\n    parser = argparse.ArgumentParser(description=\"Mini-Codex generated CLI\")\n    parser.add_argument(\"name\", nargs=\"?\", default=\"student\")\n    parser.add_argument(\"--excited\", action=\"store_true\")\n    args = parser.parse_args()\n    print(build_message(args.name, excited=args.excited))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      },
+      {
+        "path": "README.md",
+        "old_content_hash": null,
+        "new_content": "# Mini-Codex Generated Python Project\n\nCreated from an empty workspace.\n\nOriginal request:\n\n```text\nCreate a Python CLI project with main.py and offline tests.\n```\n\n## Run\n\n```powershell\npython main.py\n```\n\n## Test\n\n```powershell\npython -m unittest discover -s tests\n```\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      },
+      {
+        "path": "tests/test_basic.py",
+        "old_content_hash": null,
+        "new_content": "from __future__ import annotations\n\nimport unittest\n\nfrom main import build_message\n\n\nclass GeneratedCliTest(unittest.TestCase):\n    def test_build_message(self) -> None:\n        self.assertEqual(build_message(\"Ada\"), \"Hello, Ada.\")\n        self.assertEqual(build_message(\"Ada\", excited=True), \"Hello, Ada!\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+        "reason": "Create new file for request: Create a Python CLI project."
+      }
+    ],
+    "expected_visible_change": "The workspace contains a runnable Python CLI module and offline tests.",
+    "validation_commands": [
+      "python -m compileall C:\\Users\\27419\\Desktop\\ai-tools\\hw7-multi-agent-coding-council\\workspace\\empty_from_zero_smoke",
+      "python -m unittest discover -s tests"
+    ],
+    "risks": [
+      "Mock mode is deterministic evidence, not a live model-backed patch."
+    ],
+    "prompt": "",
+    "raw_response": ""
+  },
+  "result": {
+    "status": "applied",
+    "applied_files": [
+      "main.py",
+      "README.md",
+      "tests/test_basic.py"
+    ],
+    "rejected_files": [],
+    "backup_dir": "outputs\\empty_from_zero_smoke\\snapshots\\before_mock_ffa05189",
+    "validations": [
+      {
+        "command": "python -m compileall workspace/empty_from_zero_smoke",
+        "success": true,
+        "stdout": "Listing 'workspace/empty_from_zero_smoke'...\nCompiling 'workspace/empty_from_zero_smoke\\\\main.py'...\nListing 'workspace/empty_from_zero_smoke\\\\tests'...\nCompiling 'workspace/empty_from_zero_smoke\\\\tests\\\\test_basic.py'...\n\n[duration_seconds=0.070]",
+        "stderr": "",
+        "artifacts_found": [
+          "main.py",
+          "README.md",
+          "tests/test_basic.py"
+        ]
+      },
+      {
+        "command": "python -m unittest discover -s tests",
+        "success": true,
+        "stdout": "[duration_seconds=0.083]",
+        "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+        "artifacts_found": [
+          "main.py",
+          "README.md",
+          "tests/test_basic.py"
+        ]
+      }
+    ],
+    "preview_url": ""
+  }
+}

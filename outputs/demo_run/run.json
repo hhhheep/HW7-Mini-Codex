@@ -1,0 +1,241 @@
+{
+  "agent_outputs": [
+    {
+      "artifacts_to_create": [
+        "TaskSpec JSON",
+        "milestone plan"
+      ],
+      "decisions": [
+        "Use a local single-machine generated project.",
+        "Validate generated code with allowlisted commands.",
+        "Keep external model calls configurable through environment variables."
+      ],
+      "next_steps": [
+        "Architect Agent designs the generated project structure."
+      ],
+      "prompt": "",
+      "raw_response": "",
+      "role": "Planner Agent",
+      "summary": "Converted the user request into a bounded experiment task specification."
+    },
+    {
+      "artifacts_to_create": [
+        "generated_project/app.py",
+        "generated_project/requirements.txt",
+        "generated_project/README.md",
+        "generated_project/tests/test_basic.py"
+      ],
+      "decisions": [
+        "Generate actual runnable starter files.",
+        "Run compileall and unittest discovery as safe validation commands.",
+        "Package generated_project as a downloadable zip."
+      ],
+      "next_steps": [
+        "Coder Agent writes generated_project files."
+      ],
+      "prompt": "",
+      "raw_response": "",
+      "role": "Architect Agent",
+      "summary": "Designed a generated-project structure and validation flow."
+    },
+    {
+      "artifacts_to_create": [
+        "app.py",
+        "requirements.txt",
+        "README.md",
+        "tests/test_basic.py"
+      ],
+      "decisions": [
+        "Use a Streamlit app stub that records experiment parameters.",
+        "Keep generated code runnable without API keys.",
+        "Include unittest-based file existence validation."
+      ],
+      "next_steps": [
+        "Runner validates generated files with allowlisted commands."
+      ],
+      "prompt": "",
+      "raw_response": "",
+      "role": "Coder Agent",
+      "summary": "Generated actual starter project files under generated_project/."
+    }
+  ],
+  "api_mode_used": false,
+  "api_packaged": false,
+  "architecture": {
+    "data_flow": [
+      "TaskSpec -> ArchitectureSpec",
+      "ArchitectureSpec -> GeneratedFile list",
+      "GeneratedFile list -> generated_project/",
+      "generated_project/ -> validation commands",
+      "validation results -> JudgeReport and final report"
+    ],
+    "file_structure": [
+      "generated_project/app.py",
+      "generated_project/requirements.txt",
+      "generated_project/README.md",
+      "generated_project/tests/test_basic.py"
+    ],
+    "modules": [
+      "Streamlit generated app",
+      "Generated project tests",
+      "Allowlisted runner",
+      "Artifact collector",
+      "Judge/reporter"
+    ],
+    "plan": [
+      {
+        "goal": "Create generated app scaffold",
+        "id": "P1",
+        "inputs": [
+          "TaskSpec"
+        ],
+        "outputs": [
+          "generated_project/app.py",
+          "generated_project/requirements.txt"
+        ],
+        "risk": "Generated UI may be too generic if the task is underspecified."
+      },
+      {
+        "goal": "Add documentation and tests",
+        "id": "P2",
+        "inputs": [
+          "TaskSpec",
+          "generated app scaffold"
+        ],
+        "outputs": [
+          "generated_project/README.md",
+          "generated_project/tests/test_basic.py"
+        ],
+        "risk": "Tests must avoid requiring unavailable API keys."
+      },
+      {
+        "goal": "Validate and report",
+        "id": "P3",
+        "inputs": [
+          "generated_project"
+        ],
+        "outputs": [
+          "validation results",
+          "final_report.md",
+          "WORKFLOW_LOG.md"
+        ],
+        "risk": "Validation should stay allowlisted and not execute arbitrary generated behavior."
+      }
+    ],
+    "summary": "Single-machine generated-project pipeline with local validation and report collection."
+  },
+  "artifacts": {
+    "final_report": "outputs\\demo_run\\final_report.md",
+    "generated_project_dir": "outputs\\demo_run\\generated_project",
+    "generated_project_zip": "outputs\\demo_run\\generated_project.zip",
+    "workflow_log": "outputs\\demo_run\\WORKFLOW_LOG.md"
+  },
+  "finished_at": "2026-06-19T09:15:04Z",
+  "generated_files": [
+    {
+      "content": "from __future__ import annotations\n\nimport streamlit as st\n\n\nst.set_page_config(page_title=\"Generated AI Experiment App\", layout=\"wide\")\nst.title(\"Generated AI Experiment App\")\nst.write(\"Build and validate a small generative-AI application from this task: Build a small Streamlit generative-AI prompt experiment app. The generated project should let a user record prompt variants, seed values, expected model behavior, and result notes. It should include a README, requirements file, and a basic validation test so the orchestrator can package and judge the result.\")\n\nprompt = st.text_area(\"Experiment prompt\", \"Compare two prompt variants for a generative AI demo.\")\nseed = st.number_input(\"Seed\", value=42, step=1)\n\nif st.button(\"Create experiment record\"):\n    st.subheader(\"Generated experiment record\")\n    st.json({\n        \"prompt\": prompt,\n        \"seed\": int(seed),\n        \"status\": \"recorded\",\n        \"note\": \"Replace this stub with a real LLM or diffusion backend when credentials/GPU are available.\",\n    })\n",
+      "path": "app.py",
+      "purpose": "Streamlit generated experiment app"
+    },
+    {
+      "content": "streamlit>=1.35\n",
+      "path": "requirements.txt",
+      "purpose": "Generated project dependencies"
+    },
+    {
+      "content": "# Generated AI Experiment App\n\n## Objective\n\nBuild and validate a small generative-AI application from this task: Build a small Streamlit generative-AI prompt experiment app. The generated\nproject should let a user record prompt variants, seed values, expected model\nbehavior, and result notes. It should include a README, requirements file, and a\nbasic validation test so the orchestrator can package and judge the result.\n\n## Run\n\n```powershell\npython -m pip install -r requirements.txt\nstreamlit run app.py\n```\n\n## Validation\n\nThis generated project is validated by the parent orchestrator with:\n\n```powershell\npython -m compileall generated_project\npython -m unittest discover -s generated_project/tests\n```\n",
+      "path": "README.md",
+      "purpose": "Generated project documentation"
+    },
+    {
+      "content": "from __future__ import annotations\n\nimport unittest\nfrom pathlib import Path\n\n\nclass GeneratedProjectTest(unittest.TestCase):\n    def test_required_files_exist(self) -> None:\n        root = Path(__file__).resolve().parents[1]\n        self.assertTrue((root / \"app.py\").exists())\n        self.assertTrue((root / \"requirements.txt\").exists())\n        self.assertTrue((root / \"README.md\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+      "path": "tests/test_basic.py",
+      "purpose": "Basic generated project validation test"
+    }
+  ],
+  "judge_report": {
+    "final_summary": "Generated project satisfies the minimum HW7 agentic workflow validation.",
+    "missing_requirements": [],
+    "pass_status": true,
+    "prompt": "",
+    "raw_response": "",
+    "suggested_fixes": []
+  },
+  "mode": "mock_test",
+  "project_idea": "Build a small Streamlit generative-AI prompt experiment app. The generated\nproject should let a user record prompt variants, seed values, expected model\nbehavior, and result notes. It should include a README, requirements file, and a\nbasic validation test so the orchestrator can package and judge the result.\n",
+  "provider": null,
+  "reporter": {
+    "artifacts_to_create": [
+      "run.json",
+      "WORKFLOW_LOG.md",
+      "final_report.md",
+      "generated_project.zip"
+    ],
+    "decisions": [
+      "Write run.json",
+      "Write WORKFLOW_LOG.md",
+      "Write final_report.md",
+      "Zip generated_project"
+    ],
+    "next_steps": [
+      "Record demo video/screenshot and submit repository link."
+    ],
+    "prompt": "",
+    "raw_response": "",
+    "role": "Reporter",
+    "summary": "Collected generated files, validation output, judge result, and final downloadable artifacts."
+  },
+  "schema_version": 2,
+  "started_at": "2026-06-19T09:15:03Z",
+  "task_spec": {
+    "constraints": [
+      "single-machine demo",
+      "no remote SSH/GPU orchestration",
+      "generated files must be locally validated",
+      "workflow log must preserve prompts, outputs, and validation results"
+    ],
+    "objective": "Build and validate a small generative-AI application from this task: Build a small Streamlit generative-AI prompt experiment app. The generated\nproject should let a user record prompt variants, seed values, expected model\nbehavior, and result notes. It should include a README, requirements file, and a\nbasic validation test so the orchestrator can package and judge the result.",
+    "success_criteria": [
+      "generated_project contains runnable starter files",
+      "generated files pass compile validation",
+      "tests pass with an allowlisted command",
+      "final report explains artifacts and remaining gaps"
+    ],
+    "target_stack": [
+      "Python",
+      "Streamlit",
+      "OpenAI-compatible LLM API optional"
+    ],
+    "title": "Generated AI Experiment App"
+  },
+  "validations": [
+    {
+      "artifacts_found": [
+        "app.py",
+        "README.md",
+        "requirements.txt",
+        "tests\\test_basic.py",
+        "__pycache__\\app.cpython-313.pyc",
+        "tests\\__pycache__\\test_basic.cpython-313.pyc"
+      ],
+      "command": "python -m compileall generated_project",
+      "stderr": "",
+      "stdout": "Listing 'generated_project'...\nCompiling 'generated_project\\\\app.py'...\nListing 'generated_project\\\\tests'...\nCompiling 'generated_project\\\\tests\\\\test_basic.py'...\n",
+      "success": true
+    },
+    {
+      "artifacts_found": [
+        "app.py",
+        "README.md",
+        "requirements.txt",
+        "tests\\test_basic.py",
+        "__pycache__\\app.cpython-313.pyc",
+        "tests\\__pycache__\\test_basic.cpython-313.pyc"
+      ],
+      "command": "python -m unittest discover -s tests",
+      "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n",
+      "stdout": "",
+      "success": true
+    }
+  ]
+}

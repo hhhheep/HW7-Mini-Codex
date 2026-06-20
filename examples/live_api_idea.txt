@@ -1,0 +1,11 @@
+Build a Streamlit app for an LLM prompt comparison experiment.
+
+The generated app should let the user enter a task, compare two prompt variants,
+optionally call an OpenAI-compatible LLM API when an API key is available, and
+fall back to deterministic mock output when no key is available.
+
+The app should record prompt, model name, settings, generated responses, and
+produce a simple comparison report.
+
+The generated project must include app.py, requirements.txt, README.md, and
+unittest tests that do not require network access or API keys.
