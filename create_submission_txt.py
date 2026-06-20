@@ -32,7 +32,7 @@ def main() -> int:
         [
             f"{label}: {args.link}",
             f"Demo material: {args.demo}",
-            "Project title: Agentic Generative AI Experiment Orchestrator",
+            "Project title: Mini-Codex: Agentic Code Modification Workbench",
             "",
         ]
     )

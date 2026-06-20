@@ -15,7 +15,7 @@ Content:
 ```text
 GitHub repository: <PUBLIC_REPOSITORY_LINK>
 Demo material: <VIDEO_OR_SCREENSHOT_FILENAME_OR_LINK>
-Project title: Agentic Generative AI Experiment Orchestrator
+Project title: Mini-Codex: Agentic Code Modification Workbench
 ```
 
 If using Google Drive instead of GitHub, replace the repository line with:

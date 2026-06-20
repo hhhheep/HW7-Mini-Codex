@@ -1,0 +1,3 @@
+GitHub repository: https://github.com/hhhheep/HW7-Mini-Codex
+Demo material: 414830006_HW7.png
+Project title: Mini-Codex: Agentic Code Modification Workbench

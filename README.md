@@ -46,6 +46,10 @@ Streamlit UI
 - `tests/test_workbench.py`: tests the mock code-change flow, hash mismatch protection, and context hashing.
 - `assignment_core/runner.py` and `assignment_core/agents.py`: retained project-generation workflow used for supporting mock/live evidence.
 
+See `AI_USAGE.md` for the concise submission-facing explanation of how AI is
+used, what the agent controls, what remains human-gated, and what evidence is
+preserved.
+
 ## Demo Flow
 
 1. Start the Streamlit UI.
@@ -128,6 +132,7 @@ dist/hw7-agentic-experiment-orchestrator.zip
 - `outputs/demo_run/`: deterministic project-generation evidence retained from the earlier package.
 - `outputs/live_api_run/`: live API project-generation evidence with prompts, raw model responses, validation, and judge result.
 - `outputs/ui_latest/`: live API run produced through the Streamlit UI before the Mini-Codex refactor.
+- `AI_USAGE.md`: submission-facing explanation of the AI workflow, Live API mode, mock mode, human review gate, and preserved evidence.
 
 ## Submission Notes
 

@@ -11,6 +11,7 @@ PACKAGE_PATH = PACKAGE_DIR / "hw7-agentic-experiment-orchestrator.zip"
 INCLUDE_PATHS = [
     ".gitignore",
     "README.md",
+    "AI_USAGE.md",
     "WORKFLOW_LOG.md",
     "AGENT_ASSIGNMENT.md",
     "ASSIGNMENT_REQUIREMENTS_MAP.md",
